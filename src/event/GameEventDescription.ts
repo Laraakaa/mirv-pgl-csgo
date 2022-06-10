@@ -20,11 +20,11 @@ class GameEventDescription {
     }
   }
 
-  setEnrichments (enrichments: {[key: string]: UserIdEnrichment}) {
+  setEnrichments (enrichments: {[key: string]: UserIdEnrichment}): void {
     this.enrichments = enrichments
   }
 
-  unserialize (bufferReader: BufferReader) {
+  unserialize (bufferReader: BufferReader): GameEvent {
     const clientTime = bufferReader.readFloatLE()
 
     const result = new GameEvent(this.eventName, clientTime)
@@ -59,7 +59,7 @@ class GameEventDescription {
           console.log('invalid key type found')
       }
 
-      if (this.enrichments && this.enrichments[key.name]) {
+      if (this.enrichments?.[key.name] !== undefined) {
         keyValue = this.enrichments[key.name].unserialize(bufferReader, keyValue)
       }
 

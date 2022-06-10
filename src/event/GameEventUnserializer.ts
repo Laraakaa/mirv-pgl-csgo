@@ -1,5 +1,6 @@
 import BufferReader from '../util/BufferReader'
 import UserIdEnrichment from './enrichment/UserIdEnrichment'
+import GameEvent from './GameEvent'
 import GameEventDescription from './GameEventDescription'
 
 class GameEventUnserializer {
@@ -10,7 +11,7 @@ class GameEventUnserializer {
     this.enrichments = enrichments
   }
 
-  unserialize (bufferReader: BufferReader) {
+  unserialize (bufferReader: BufferReader): GameEvent | undefined {
     const eventId = bufferReader.readInt32LE()
     let gameEventDescription: GameEventDescription
 
@@ -18,16 +19,16 @@ class GameEventUnserializer {
       gameEventDescription = new GameEventDescription(bufferReader)
       this.eventDescriptions[gameEventDescription.eventId] = gameEventDescription
 
-      if (this.enrichments[gameEventDescription.eventName]) {
+      if (this.enrichments[gameEventDescription.eventName] !== undefined) {
         gameEventDescription.setEnrichments(this.enrichments[gameEventDescription.eventName])
       }
     } else {
       gameEventDescription = this.eventDescriptions[eventId]
     }
 
-    if (!gameEventDescription) {
+    if (gameEventDescription === undefined) {
       console.log('Cannot find game event description for event id.')
-      return {}
+      return
     }
 
     return gameEventDescription.unserialize(bufferReader)

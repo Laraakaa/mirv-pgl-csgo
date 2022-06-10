@@ -6,60 +6,60 @@ class BufferReader {
     this.buffer = buffer
   }
 
-  readInt8 () {
+  readInt8 (): number {
     const result = this.buffer.readInt8(this.index)
     this.index++
 
     return result
   }
 
-  readUInt8 () {
+  readUInt8 (): number {
     const result = this.buffer.readUInt8(this.index)
     this.index++
 
     return result
   }
 
-  readInt16LE () {
+  readInt16LE (): number {
     const result = this.buffer.readInt16LE(this.index)
     this.index += 2
 
     return result
   }
 
-  readInt32LE () {
+  readInt32LE (): number {
     const result = this.buffer.readInt32LE(this.index)
     this.index += 4
 
     return result
   }
 
-  readUInt32LE () {
+  readUInt32LE (): number {
     const result = this.buffer.readUInt32LE(this.index)
     this.index += 4
 
     return result
   }
 
-  readBigUInt64LE () {
+  readBigUInt64LE (): BigInt {
     const lo = this.readUInt32LE()
-	  const hi = this.readUInt32LE()
+    const hi = this.readUInt32LE()
 
     return BigInt(lo) | (BigInt(hi) << 32n)
   }
 
-  readFloatLE () {
+  readFloatLE (): number {
     const result = this.buffer.readFloatLE(this.index)
     this.index += 4
 
     return result
   }
 
-  readBoolean () {
-    return this.readUInt8() != 0
+  readBoolean (): boolean {
+    return this.readUInt8() !== 0
   }
 
-  readCString () {
+  readCString (): string {
     const beginning = this.index
     for (let i = this.index; i < this.buffer.length; i++) {
       const bin = this.buffer.readInt8(i)

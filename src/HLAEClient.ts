@@ -54,7 +54,7 @@ class HLAEServer extends EventEmitter {
   handleGameEvent = (bufferReader: BufferReader) => {
     const gameEvent = this.gameEventUnserializer.unserialize(bufferReader)
 
-    if (gameEvent) {
+    if (gameEvent !== undefined) {
       this.emit('gameEvent', gameEvent)
     }
   }
@@ -72,7 +72,7 @@ class HLAEServer extends EventEmitter {
     this.sendString('transEnd\0')
   }
 
-  sendExecCommand = (command: String) => {
+  sendExecCommand = (command: string) => {
     const str = `exec\0${command}\0`
     this.sendString(str)
   }
