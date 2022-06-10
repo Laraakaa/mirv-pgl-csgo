@@ -1,37 +1,37 @@
-import BufferReader from '../util/BufferReader';
-import UserIdEnrichment from './enrichment/UserIdEnrichment';
-import GameEventDescription from './GameEventDescription';
+import BufferReader from '../util/BufferReader'
+import UserIdEnrichment from './enrichment/UserIdEnrichment'
+import GameEventDescription from './GameEventDescription'
 
 class GameEventUnserializer {
   enrichments: {[key: string]: {[key: string]: UserIdEnrichment}} = {};
   eventDescriptions: {[key: number]: GameEventDescription} = {};
 
-  constructor(enrichments: {[key: string]: {[key: string]: UserIdEnrichment}} = {}) {
-    this.enrichments = enrichments;
+  constructor (enrichments: {[key: string]: {[key: string]: UserIdEnrichment}} = {}) {
+    this.enrichments = enrichments
   }
 
-  unserialize(bufferReader: BufferReader) {
-    let eventId = bufferReader.readInt32LE();
-    let gameEventDescription: GameEventDescription;
+  unserialize (bufferReader: BufferReader) {
+    const eventId = bufferReader.readInt32LE()
+    let gameEventDescription: GameEventDescription
 
     if (eventId === 0) {
-      gameEventDescription = new GameEventDescription(bufferReader);
-      this.eventDescriptions[gameEventDescription.eventId] = gameEventDescription;
+      gameEventDescription = new GameEventDescription(bufferReader)
+      this.eventDescriptions[gameEventDescription.eventId] = gameEventDescription
 
       if (this.enrichments[gameEventDescription.eventName]) {
         gameEventDescription.setEnrichments(this.enrichments[gameEventDescription.eventName])
       }
     } else {
-      gameEventDescription = this.eventDescriptions[eventId];
+      gameEventDescription = this.eventDescriptions[eventId]
     }
 
     if (!gameEventDescription) {
-      console.log('Cannot find game event description for event id.');
-      return {};
+      console.log('Cannot find game event description for event id.')
+      return {}
     }
 
-    return gameEventDescription.unserialize(bufferReader);
+    return gameEventDescription.unserialize(bufferReader)
   }
 }
 
-export default GameEventUnserializer;
+export default GameEventUnserializer

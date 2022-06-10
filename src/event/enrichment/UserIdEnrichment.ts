@@ -1,10 +1,10 @@
-import BufferReader from "../../util/BufferReader";
+import BufferReader from '../../util/BufferReader'
 
 class UserIdEnrichment {
   enrichments = ['useridWithSteamId'];
 
-  unserialize(bufferReader: BufferReader, keyValue: any) {
-    const steamId = bufferReader.readBigUInt64LE().toString();
+  unserialize (bufferReader: BufferReader, keyValue: any) {
+    const steamId = bufferReader.readBigUInt64LE().toString()
 
     return {
       value: keyValue,
@@ -13,4 +13,4 @@ class UserIdEnrichment {
   }
 }
 
-export default UserIdEnrichment;
+export default UserIdEnrichment
